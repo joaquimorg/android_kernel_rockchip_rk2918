@@ -133,11 +133,11 @@ static int mma7660_set_rate(struct i2c_client *client, char rate)
 	
 	if (rate > 128)
         return -EINVAL;
-	printk("[ZWP]%s,rate = %d\n",__FUNCTION__,rate);
+	//printk("[ZWP] %s,rate = %d\n",__FUNCTION__,rate);
 	//?????????,??RawDataLength??????,????gsensor????
 	if(rate > 2)
 		rate -= 2;
-	rk28printk("[ZWP]%s,new rate = %d\n",__FUNCTION__,rate);
+	rk28printk("[ZWP] %s,new rate = %d\n",__FUNCTION__,rate);
 
 /*	
     for (i = 0; i < 7; i++) {
@@ -162,7 +162,8 @@ static int mma7660_start_dev(struct i2c_client *client, char rate)
 {
 	char buffer[MMA7660_REG_LEN];
 	int ret = 0;
-
+	//printk("[ZWP] %s\n",__FUNCTION__);
+	
 	buffer[0] = MMA7660_REG_INTSU;
 	buffer[1] = 0x10;	//0x10; modify by zhao
 	ret = mma7660_tx_data(client, &buffer[0], 2);
@@ -195,7 +196,7 @@ static int mma7660_start(struct i2c_client *client, char rate)
 static int mma7660_close_dev(struct i2c_client *client)
 {    	
 	char buffer[2];
-
+	//printk("[ZWP] %s\n",__FUNCTION__);
 	disable_irq_nosync(client->irq);
 
 	buffer[0] = MMA7660_REG_MODE;
@@ -271,66 +272,9 @@ static int mma7660_get_data(struct i2c_client *client)
             return ret;
     } while ((buffer[0] & 0x40) || (buffer[1] & 0x40) || (buffer[2] & 0x40));
 
-	x =  mma7660_convert_to_int(buffer[MMA7660_REG_X_OUT])*XSENSIT;
-	y =  mma7660_convert_to_int(buffer[MMA7660_REG_Y_OUT])*YSENSIT;
-	z =  mma7660_convert_to_int(buffer[MMA7660_REG_Z_OUT])*ZSENSIT;
-
-#if defined(CONFIG_MACH_A8N)
-	axis.x = y;
-	axis.y = -x;
-	axis.z = z;
-#elif  defined(CONFIG_MACH_A70HT3N)
-	axis.x = y;
-	axis.y = -z;
-	axis.z = -x;
-#elif  defined(CONFIG_MACH_M805) 
-	axis.x = y;
-	axis.y = -z;
-	axis.z = -x;
-#elif  defined(CONFIG_MACH_M815HC)
-	axis.x = x;
-	axis.y = -z;
-	axis.z = y;
-
-#elif  defined(CONFIG_MACH_M727)
-	axis.x = x;
-	axis.y = y;
-	axis.z = z;
-#elif  defined(CONFIG_MACH_M727HCN) || defined(CONFIG_MACH_M712HC) || defined(CONFIG_MACH_M723HR) || defined(CONFIG_MACH_M727HD)
-	axis.x = z;
-	axis.y = y;
-	axis.z = x;
-#elif  defined(CONFIG_MACH_M719HC) 
-	axis.x = -x;
-	axis.y = -z;
-	axis.z = -y;
-
-#elif  defined(CONFIG_MACH_M732HCN) 
-	axis.x = y;
-	axis.y = -z;
-	axis.z = -x;
-
-#elif  defined(CONFIG_MACH_M907HD)
-	axis.x = -x;
-	axis.y = -y;
-	axis.z = z;
-#elif  defined(CONFIG_MACH_M722HCN)
-	axis.x = x;
-	axis.y = y;
-	axis.z = z;
-#elif  defined(CONFIG_MACH_A80HTN)
-	axis.x = -y;
-	axis.z = x;
-	axis.y = -z;
-#elif  defined(CONFIG_MACH_M805HC) || defined(CONFIG_MACH_M805HD) 
-	axis.x = x;
-	axis.y = -z;
-	axis.z = y;
-#else
-	axis.x = y;
-	axis.y = -x;
-	axis.z = z;
-#endif
+	axis.x =  mma7660_convert_to_int(buffer[MMA7660_REG_X_OUT])*XSENSIT;
+	axis.y =  mma7660_convert_to_int(buffer[MMA7660_REG_Y_OUT])*YSENSIT;
+	axis.z =  mma7660_convert_to_int(buffer[MMA7660_REG_Z_OUT])*ZSENSIT;
 
 	//	printk("l=%-4d,x=%-5d, y=%-5d, z=%-5d. %s:\n",__LINE__,axis.x, axis.y, axis.z, __func__);
 	//	printk("%s: x=%-5d, y=%-5d, z=%-d\n",__func__, axis.x, axis.y, axis.z);
@@ -373,6 +317,7 @@ static int mma7660_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	char rate;
 	struct i2c_client *client = container_of(mma7660_device.parent, struct i2c_client, dev);
 
+	//printk("[ZWP] %s CMD : %x\n",__FUNCTION__, cmd);
 	switch (cmd) {
 	case ECS_IOCTL_APP_SET_RATE:
 		if (copy_from_user(&rate, argp, sizeof(rate)))
@@ -486,6 +431,7 @@ static int mma7660_remove(struct i2c_client *client)
 #ifdef CONFIG_ANDROID_POWER
 static int mma7660_suspend(android_early_suspend_t *h)
 {
+	//printk("[ZWP] %s\n",__FUNCTION__);
 	struct i2c_client *client = container_of(mma7660_device.parent, struct i2c_client, dev);
 	rk28printk("Gsensor mma7760 enter suspend\n");
 	return mma7660_close_dev(client);
@@ -493,6 +439,7 @@ static int mma7660_suspend(android_early_suspend_t *h)
 
 static int mma7660_resume(android_early_suspend_t *h)
 {
+	//printk("[ZWP] %s\n",__FUNCTION__);
 	struct i2c_client *client = container_of(mma7660_device.parent, struct i2c_client, dev);
     struct mma7660_data *mma7660 = (struct mma7660_data *)i2c_get_clientdata(client);
 	rk28printk("Gsensor mma7760 resume!!\n");

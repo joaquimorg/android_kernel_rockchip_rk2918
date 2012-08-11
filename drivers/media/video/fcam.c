@@ -23,7 +23,7 @@ o* Driver for MT9M001 CMOS Image Sensor from Micron
 #include <mach/board.h>
 #include <mach/gpio.h>
 
-static int debug=1;
+static int debug;
 module_param(debug, int, S_IRUGO|S_IWUSR);
 
 #define dprintk(level, fmt, arg...) do {			\
@@ -238,12 +238,12 @@ static int sensor_deactivate(struct i2c_client *client)
 }
 
 extern int i2c1_prober_verify(u32 dev_addr, u16 reg, u32 reg_addr_len, u32 reg_val_len, u32 id);
-extern struct cam_sensor_info cam_sensor_info_ov2655;
-extern struct cam_sensor_info cam_sensor_info_nt99250;
-extern struct cam_sensor_info cam_sensor_info_gc0307;
-extern struct cam_sensor_info  cam_sensor_info_gt2005;
-extern struct cam_sensor_info  cam_sensor_info_ov7675;
-extern struct cam_sensor_info  cam_sensor_info_gc0308;
+extern struct cam_sensor_info 	cam_sensor_info_ov2655;
+extern struct cam_sensor_info 	cam_sensor_info_nt99250;
+extern struct cam_sensor_info 	cam_sensor_info_gc0307;
+extern struct cam_sensor_info  	cam_sensor_info_gt2005;
+extern struct cam_sensor_info  	cam_sensor_info_ov7675;
+extern struct cam_sensor_info  	cam_sensor_info_gc0308;
 
 static struct cam_sensor_info * all_cam_info[]= {
     &cam_sensor_info_ov2655,
@@ -437,9 +437,10 @@ static ssize_t fname_show(struct device *dev, struct device_attribute *attr, cha
 }
 
 static struct device *fcam_dev = NULL;
-static struct class *  fcam_class = NULL;
+static struct class *fcam_class = NULL;
 static DEVICE_ATTR(fcam, 0666, fcam_show, fcam_store);
 static DEVICE_ATTR(name, 0666, fname_show, NULL);
+
 static int sensor_probe(struct i2c_client *client,
 			 const struct i2c_device_id *did)
 {

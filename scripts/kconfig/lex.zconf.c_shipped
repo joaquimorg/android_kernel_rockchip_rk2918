@@ -1,5 +1,5 @@
 
-#line 3 "scripts/kconfig/lex.zconf.c"
+#line 3 "/home/joaquim/Dev/AndroidDev/system.4.1/kernel/rockchip/rk2918/scripts/kconfig/lex.zconf.c"
 
 #define  YY_INT_ALIGNED short int
 

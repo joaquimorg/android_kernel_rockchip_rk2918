@@ -32,11 +32,12 @@
 #include "rt5631.h"
 #include <linux/timer.h>
 
-#if 0
-#define DBG(x...)	printk(x)
-#else
+//#if 0
+//#define DBG(x...)	printk(x)
+//#else
 #define DBG(x...)
-#endif
+//#endif
+
 #define RT5631_VERSION "0.01 alsa 1.0.24"
 
 #ifndef RT5631_ENABLE_ALC_DAC

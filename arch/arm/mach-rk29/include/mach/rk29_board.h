@@ -310,26 +310,27 @@
 
 
 //---------------------------------------------------------------------------
+
 #if defined CONFIG_SOC_CAMERA_GT2005
-#define CONFIG_SENSOR_1 RK29_CAM_SENSOR_GT2005 /* front camera sensor */
-#define CONFIG_SENSOR_IIC_ADDR_1				0x78
-#define GT2005_FLIP 1
+	#define CONFIG_SENSOR_1 RK29_CAM_SENSOR_GT2005 /* front camera sensor */
+	#define CONFIG_SENSOR_IIC_ADDR_1				0x78
+	#define GT2005_FLIP 1
 #elif defined CONFIG_SOC_CAMERA_NT99250
-#define CONFIG_SENSOR_1 RK29_CAM_SENSOR_NT99250 /* front camera sensor */
-#define CONFIG_SENSOR_IIC_ADDR_1				0x6c
-#if defined CONFIG_OLD_NT99250
-#define NT99250_X_OFFSET	2
-#define NT99250_X_OFFSET	2
-#define VAL_306D	0x00
-#endif 	
-#define NT99250_MIRROR	0
-#define NT99250_FLIP		0
+	#define CONFIG_SENSOR_1 RK29_CAM_SENSOR_NT99250 /* front camera sensor */
+	#define CONFIG_SENSOR_IIC_ADDR_1				0x6c
+	#if defined CONFIG_OLD_NT99250
+		#define NT99250_X_OFFSET	2
+		#define NT99250_X_OFFSET	2
+		#define VAL_306D	0x00
+	#endif 	
+	#define NT99250_MIRROR	0
+	#define NT99250_FLIP		0
 #elif defined CONFIG_SOC_CAMERA_FCAM
-#define CONFIG_SENSOR_1 RK29_CAM_SENSOR_FCAM /* front camera sensor */
-#define CONFIG_SENSOR_IIC_ADDR_1				0xff
+	#define CONFIG_SENSOR_1 RK29_CAM_SENSOR_FCAM /* front camera sensor */
+	#define CONFIG_SENSOR_IIC_ADDR_1				0xff
 #elif defined CONFIG_SOC_CAMERA_GC0307
-#define CONFIG_SENSOR_1						RK29_CAM_SENSOR_GC0307	/* front camera sensor */
-#define CONFIG_SENSOR_IIC_ADDR_1			0x42
+	#define CONFIG_SENSOR_1						RK29_CAM_SENSOR_GC0307	/* front camera sensor */
+	#define CONFIG_SENSOR_IIC_ADDR_1			0x42
 #endif
 
 #define GC0308_MIRROR	1

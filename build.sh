@@ -2,11 +2,11 @@
 CYANOGENMOD=../../..
 
 # Make mrproper
-#make mrproper
+make mrproper
 
 # Set config
-#make CM10_Pascal2_defconfig
-make menuconfig
+make CM10_Pascal2_defconfig
+#make menuconfig
 
 # Make modules
 nice -n 10 make -j2 modules
@@ -20,5 +20,5 @@ nice -n 10 make -j2 kernel.img
 cp kernel.img $CYANOGENMOD/device/rockchip/pascal2/kernel
 
 # Make mrproper
-#make mrproper
+make mrproper
 
