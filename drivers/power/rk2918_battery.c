@@ -33,6 +33,13 @@
 #include <linux/ktime.h>
 #include <linux/slab.h>
 
+
+#if 0
+#define dprint(format, x...) printk("RK29 Battery: "format, ## x)
+#else
+#define dprint(format, x...) //
+#endif
+
 #if 0
 #define DBG(x...)   printk(x)
 #else
@@ -264,6 +271,8 @@ static int rk2918_battery_load_capacity(void)
 	char* p = value;
     struct file* fp = filp_open(BATT_FILENAME,O_RDONLY,0);
     
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
     //get true capacity
     for (i = 0; i < 20; i++)
     {
@@ -393,6 +402,8 @@ static void rk2918_get_charge_status(void)
 {
     int charge_on = 0;
     
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
     if (gBatteryData->dc_det_pin != INVALID_GPIO)
     {
         if (gpio_get_value (gBatteryData->dc_det_pin) == gBatteryData->dc_det_level)
@@ -453,6 +464,9 @@ static void rk2918_get_charge_status(void)
 
 static void rk2918_get_bat_status(struct rk2918_battery_data *bat)
 {
+	
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
     rk2918_get_charge_status();
     
 	if(gBatChargeStatus == 1)
@@ -500,6 +514,8 @@ static void rk2918_get_bat_health(struct rk2918_battery_data *bat)
 
 static void rk2918_get_bat_present(struct rk2918_battery_data *bat)
 {
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
 	if(gBatVoltage < bat->bat_min)
 	gBatPresent = 0;
 	else
@@ -513,6 +529,8 @@ static int rk2918_get_bat_capacity_raw(int BatVoltage)
 	int capacity = 0;
 	int *p = adc_raw_table_bat;
     
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
     if (gBatChargeStatus == 1)
     {
         p = adc_raw_table_ac;
@@ -552,6 +570,8 @@ static int rk2918_battery_resume_get_Capacity(int deltatime)
 	int i;
     int tmp = 0;
     int capacity = 0;
+	
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
 
 	for (i = 0; i < 20; i++)
     {
@@ -696,6 +716,8 @@ static int rk2918_get_bat_capacity_ext(int BatVoltage)
     int i = 0;
 	int capacity = 0;
 	static int lostcount = 0;
+	
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
 	
     capacity = rk2918_get_bat_capacity_raw(BatVoltage);
 	capacitytmp = capacity;
@@ -855,6 +877,8 @@ static void rk2918_get_bat_voltage(struct rk2918_battery_data *bat)
 	int i,*pSamp,*pStart = &gBatVoltageSamples[0],num = 0;
 	int temp[2] = {0,0};
 	
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
 	value = gBatteryData->adc_val;
 	AdcTestvalue = value;
     adc_async_read(gBatteryData->client);
@@ -897,6 +921,8 @@ static void rk2918_get_bat_capacity(struct rk2918_battery_data *bat)
     s32 deltatime = 0;
     ktime_t ktmietmp;
     struct timespec ts;
+	
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
     
 	ktmietmp = ktime_get_real();
     ts = ktime_to_timespec(ktmietmp);
@@ -933,11 +959,15 @@ static int buf_offset = 0;
 
 static void rk2918_battery_timer_work(struct work_struct *work)
 {		
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
 	rk2918_get_bat_status(gBatteryData);
 	rk2918_get_bat_health(gBatteryData);
 	rk2918_get_bat_present(gBatteryData);
 	rk2918_get_bat_voltage(gBatteryData);
+	
 	//to prevent gBatCapacity be changed sharply
+	
 	if (gBatCapacity < 0)
 	{
 		gBatCapacity = 0;
@@ -1035,6 +1065,9 @@ static int rk2918_ac_get_property(struct power_supply *psy,
 	int ret = 0;
 	charger_type_t charger;
 	charger =  CHARGER_USB;
+	
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
 	switch (psp) {
 	case POWER_SUPPLY_PROP_ONLINE:
 		if (psy->type == POWER_SUPPLY_TYPE_MAINS)
@@ -1062,6 +1095,8 @@ static int rk2918_battery_get_property(struct power_supply *psy,
 		struct rk2918_battery_data, battery);
 	int ret = 0;
 
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
 	switch (psp) {
 	case POWER_SUPPLY_PROP_STATUS:
 		val->intval = gBatStatus;
@@ -1129,9 +1164,10 @@ static enum power_supply_property rk2918_ac_props[] = {
 static int rk2918_battery_suspend(struct platform_device *dev, pm_message_t state)
 {
 	/* flush all pending status updates */
-	printk("rk2918_battery_suspend!!!\n");
 	struct rk2918_battery_platform_data *pdata = dev->dev.platform_data;
 
+	printk("rk2918_battery_suspend!!!\n");
+	
 	if (pdata->charge_cur_ctl != INVALID_GPIO) {
 		gpio_set_value(pdata->charge_cur_ctl, pdata->charge_cur_ctl_level); /* huge current charge */
 	}
@@ -1160,6 +1196,8 @@ static int rk2918_battery_resume(struct platform_device *dev)
 
 static irqreturn_t rk2918_battery_interrupt(int irq, void *dev_id)
 {
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
 //    if ((rk2918_get_charge_status()) && (gBatFullFlag != 1))
 //    {
 //        gBatFullFlag = 1;
@@ -1206,6 +1244,8 @@ static void rk2918_low_battery_check(void)
     int i;
     int tmp = 0;
     
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
+	
     for (i = 0; i < 100; i++)
     {
         tmp += adc_sync_read(gBatteryData->client);
@@ -1262,6 +1302,8 @@ static int rk2918_battery_probe(struct platform_device *pdev)
 	struct rk2918_battery_platform_data *pdata = pdev->dev.platform_data;
 	int irq_flag;
 	int i = 0;
+	
+	dprint("func=%s, line=%d :\n", __func__, __LINE__);
 	
 	data = kzalloc(sizeof(*data), GFP_KERNEL);
 	if (data == NULL) {
@@ -1404,15 +1446,15 @@ static int rk2918_battery_probe(struct platform_device *pdev)
 		goto err_usb_failed;
 	}
 #endif
+
 	ret = power_supply_register(&pdev->dev, &data->battery);
 	if (ret)
 	{
 		printk(KERN_INFO "fail to battery power_supply_register\n");
 		goto err_battery_failed;
 	}
+
 	platform_set_drvdata(pdev, data);
-	
-	INIT_WORK(&data->timer_work, rk2918_battery_timer_work);
 	
 //    irq_flag = (pdata->charge_ok_level) ? IRQF_TRIGGER_RISING : IRQF_TRIGGER_FALLING;
 //	ret = request_irq(gpio_to_irq(pdata->charge_ok_pin), rk2918_battery_interrupt, irq_flag, "rk2918_battery", data);
@@ -1439,8 +1481,11 @@ static int rk2918_battery_probe(struct platform_device *pdev)
 #endif
 
 	setup_timer(&data->timer, rk2918_batscan_timer, (unsigned long)data);
-	//data->timer.expires  = jiffies + 2000;
-	//add_timer(&data->timer);
+	// changed to notify android of status....
+	data->timer.expires  = jiffies + 5000; // 2000
+	add_timer(&data->timer);
+   
+	INIT_WORK(&data->timer_work, rk2918_battery_timer_work);   
    
     rk29_battery_dbg_class = class_create(THIS_MODULE, "rk29_battery");
 	battery_dev = device_create(rk29_battery_dbg_class, NULL, MKDEV(0, 1), NULL, "battery");
@@ -1448,7 +1493,7 @@ static int rk2918_battery_probe(struct platform_device *pdev)
 	if (ret)
 	{
 		printk("create file sys failed!!! \n");
-		//goto err_dcirq_failed;
+		goto err_dcirq_failed;
 	}
 	for(i = 0; i<10; i++)
 	{
