@@ -703,10 +703,10 @@ static int __init parse_tag(const struct tag *tag)
 static void __init parse_tags(const struct tag *t)
 {
 	for (; t->hdr.size; t = tag_next(t))
-		if (!parse_tag(t))
-			printk(KERN_WARNING
+		if (!parse_tag(t));
+			/*printk(KERN_WARNING
 				"Ignoring unrecognised tag 0x%08x\n",
-				t->hdr.tag);
+				t->hdr.tag);*/
 }
 
 /*

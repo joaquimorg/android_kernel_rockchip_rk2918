@@ -837,7 +837,8 @@ static int __init cpufreq_smartass_init(void)
 	}
 
 	/* Scale up is high priority */
-	up_wq = alloc_workqueue("ksmartass_up", WQ_HIGHPRI, 1);
+	//up_wq = alloc_workqueue("ksmartass_up", WQ_HIGHPRI, 1);
+	up_wq = alloc_workqueue("ksmartass_up", WQ_HIGHPRI | WQ_CPU_INTENSIVE, 1);
 	down_wq = alloc_workqueue("ksmartass_down", 0, 1);
 	if (!up_wq || !down_wq)
 		return -ENOMEM;
