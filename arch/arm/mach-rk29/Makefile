@@ -13,7 +13,7 @@ obj-$(CONFIG_RK29_VPU) += vpu_mem.o vpu_service.o
 obj-$(CONFIG_RK29_I2C_INSRAM) += i2c_sram.o
 obj-y += spi_sram.o
 
-obj-$(CONFIG_VENDOR_YF) += board-rk29yf.o board-rk29yf-key.o  board-rk29yf-power.o
+obj-$(CONFIG_VENDOR_YF) += board-rk29yf.o board-rk29yf-key.o board-rk29sdk-rfkill.o board-rk29yf-power.o
 
 obj-$(CONFIG_RK29_PWM_INSRAM) += pwm_sram.o
 obj-$(CONFIG_MACH_RK29SDK) += board-rk29sdk.o board-rk29sdk-key.o board-rk29sdk-rfkill.o board-rk29sdk-power.o

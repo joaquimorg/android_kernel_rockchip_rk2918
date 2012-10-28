@@ -272,13 +272,25 @@ static int mma7660_get_data(struct i2c_client *client)
             return ret;
     } while ((buffer[0] & 0x40) || (buffer[1] & 0x40) || (buffer[2] & 0x40));
 
+	
 	axis.x =  mma7660_convert_to_int(buffer[MMA7660_REG_X_OUT])*XSENSIT;
 	axis.y =  mma7660_convert_to_int(buffer[MMA7660_REG_Y_OUT])*YSENSIT;
 	axis.z =  mma7660_convert_to_int(buffer[MMA7660_REG_Z_OUT])*ZSENSIT;
+	
+	
+	/*
+	x =  mma7660_convert_to_int(buffer[MMA7660_REG_Y_OUT])*YSENSIT;
+	y =  mma7660_convert_to_int(buffer[MMA7660_REG_X_OUT])*XSENSIT;
+	z =  mma7660_convert_to_int(buffer[MMA7660_REG_Z_OUT])*ZSENSIT;
 
+	axis.x = -x;
+	axis.y = -z;
+	axis.z = -y;
+	*/
+	
 	//	printk("l=%-4d,x=%-5d, y=%-5d, z=%-5d. %s:\n",__LINE__,axis.x, axis.y, axis.z, __func__);
 	//	printk("%s: x=%-5d, y=%-5d, z=%-d\n",__func__, axis.x, axis.y, axis.z);
-		mma7660_report_value(client, &axis);
+	mma7660_report_value(client, &axis);
 	//	Xaverage = Yaverage = Zaverage = 0;
 	return 0;
 }

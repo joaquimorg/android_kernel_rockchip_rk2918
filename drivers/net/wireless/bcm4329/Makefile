@@ -13,8 +13,8 @@ DHDCFLAGS = -DLINUX -DBCMDRIVER -DBCMDONGLEHOST -DDHDTHREAD -DBCMWPA2         \
 #options defines dependent on platform board and applicantion requirements: 
 #-DOOB_INTR_ONLY -DMMC_SDIO_ABORT -DHW_OOB
 
-DHDOFILES = dhd_linux.o linux_osl.o bcmutils.o dhd_common.o dhd_custom_gpio.o \
-	wl_iw.o siutils.o sbutils.o aiutils.o hndpmu.o bcmwifi.o dhd_sdio.o   \
+DHDOFILES = wl_iw.o dhd_linux.o linux_osl.o bcmutils.o dhd_common.o dhd_custom_gpio.o \
+	siutils.o sbutils.o aiutils.o hndpmu.o bcmwifi.o dhd_sdio.o   \
 	dhd_linux_sched.o dhd_cdc.o bcmsdh_sdmmc.o bcmsdh.o bcmsdh_linux.o    \
 	bcmsdh_sdmmc_linux.o
 

@@ -32,6 +32,12 @@ config LOGO_OEM_CLUT224
 	default n
 	help
 	  This logo option is for all OEM projects, the booting logo will come from OEM's requrement
+	
+config LOGO_PASCAL2
+	bool "224-color BQ Pascal 2"
+	default n
+	help
+	  This logo option is for BQ Pascal 2
 
 config LOGO_BLACKFIN_VGA16
 	bool "16-colour Blackfin Processor Linux logo"

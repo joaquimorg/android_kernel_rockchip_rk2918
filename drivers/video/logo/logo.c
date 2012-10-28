@@ -22,6 +22,7 @@
 #endif
 
 extern const struct linux_logo logo_oem_clut224;
+extern const struct linux_logo logo_pascal2_clut224;
 static int nologo;
 module_param(nologo, bool, 0);
 MODULE_PARM_DESC(nologo, "Disables startup logo");
@@ -118,7 +119,10 @@ const struct linux_logo * __init_refok fb_find_logo(int depth)
 		logo = &logo_m32r_clut224;
 #endif
 #ifdef CONFIG_LOGO_CRUZ_CLUT224
-                logo = &logo_cruz_clut224;
+        logo = &logo_cruz_clut224;
+#endif
+#ifdef CONFIG_LOGO_PASCAL2
+		logo = &logo_pascal2_clut224;
 #endif
 	logo->width = ((logo->data[0] << 8) + logo->data[1]);
         logo->height = ((logo->data[2] << 8) + logo->data[3]);

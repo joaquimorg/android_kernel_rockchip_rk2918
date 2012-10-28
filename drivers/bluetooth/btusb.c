@@ -932,7 +932,7 @@ static int btusb_probe(struct usb_interface *intf,
 		if (le16_to_cpu(udev->descriptor.bcdDevice) <= 0x0001)
 			return -ENODEV;
 	}
-
+	
 	data = kzalloc(sizeof(*data), GFP_KERNEL);
 	if (!data)
 		return -ENOMEM;
@@ -1066,7 +1066,7 @@ static int btusb_probe(struct usb_interface *intf,
 	}
 
 	usb_set_intfdata(intf, data);
-
+	
 	return 0;
 }
 

@@ -21,6 +21,10 @@ obj-$(CONFIG_LOGO_CHARGER_CLUT224)         += logo_charger00_clut224.o logo_char
 
 obj-$(CONFIG_SPU_BASE)			+= logo_spe_clut224.o
 
+# Logo for Pascal 2
+obj-$(CONFIG_LOGO_PASCAL2)		+= logo_pascal2_clut224.o
+
+
 # How to generate logo's
 
 # Use logo-cfiles to retrieve list of .c files to be built
