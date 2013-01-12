@@ -515,7 +515,7 @@ static int ft5x0x_process_points(struct ft5x0x_data *data)
 		}
 
 		input_sync(data->input_dev);
-		printk("release all points!!!!!!\n");
+		//printk("release all points!!!!!!\n");
 		return 0;
 	}
 
